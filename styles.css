@@ -1,0 +1,63 @@
+body {
+        background: url('fundo_jogo.jpg') no-repeat center center fixed;
+        background-size: cover;
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    
+ h1  {
+        color: #f1f1f1;
+}    
+
+#quiz-container {
+    background: linear-gradient(90deg, #ea04f1, #800379);
+    padding: 60px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.btn-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.btn {
+    background-color: #e6c50a;
+    color: rgb(3, 3, 3);
+    border: none;
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.btn:hover {
+    background-color: #fce308;
+}
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    background-color: #f1f1f146;
+    padding: 10px 0;
+    font-size: 14px;
+    color: #050505;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#next-btn {
+    margin-top: 20px;
+    font-size: 18px;
+    background-color: #430350;
+    color: aliceblue;
+}
+
+#next-btn:hover {
+    background-color: #d868cf;
+    
+}
