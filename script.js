@@ -1,7 +1,3 @@
-const somAcerto = new Audio('acerto.mp3.mp3');
-const somErro = new Audio('erro.mp3.mp3');
-
-
 const questions = [
     {
         question: "Qual é o primeiro livro da Bíblia?",
@@ -149,21 +145,41 @@ const questions = [
     }
 ];
 
+const somAcerto = new Audio('acerto.mp3.mp3');
+const somErro = new Audio('erro.mp3.mp3');
+
 const startContainer = document.getElementById('start-container');
 const quizContainer = document.getElementById('quiz-container');
+const resultContainer = document.getElementById('result-container');
+const resultText = document.getElementById('result-text');
+
 const questionElement = document.getElementById('question');
 const answerButtonsElement = document.getElementById('answer-buttons');
 const nextButton = document.getElementById('next-btn');
 const startButton = document.getElementById('start-btn');
+const restartButton = document.getElementById('restart-btn');
+const nameInput = document.getElementById('player-name');
 const body = document.body;
 
 let currentQuestionIndex = 0;
 let score = 0;
+let playerName = "";
 
 startButton.addEventListener('click', () => {
+    const name = nameInput.value.trim();
+    if (name === "") {
+        alert("Por favor, digite seu nome.");
+        return;
+    }
+    playerName = name;
     startContainer.classList.add('hide');
     quizContainer.classList.remove('hide');
     startGame();
+});
+
+restartButton.addEventListener('click', () => {
+    resultContainer.classList.add('hide');
+    startContainer.classList.remove('hide');
 });
 
 function startGame() {
@@ -180,12 +196,12 @@ function showQuestion(question) {
         const button = document.createElement('button');
         button.innerText = answer.text;
         button.classList.add('btn');
-        button.addEventListener('click', () => selectAnswer(answer, question));
+        button.addEventListener('click', () => selectAnswer(answer, question, button));
         answerButtonsElement.appendChild(button);
     });
 }
 
-function selectAnswer(answer, question) {
+function selectAnswer(answer, question, selectedButton) {
     const buttons = answerButtonsElement.querySelectorAll('.btn');
 
     buttons.forEach(button => {
@@ -193,17 +209,16 @@ function selectAnswer(answer, question) {
         const isCorrect = question.answers.find(a => a.text === answerText)?.correct;
 
         if (isCorrect) {
-            button.classList.add('correct'); // marca o correto de verde
+            button.classList.add('correct');
         } else {
-            button.classList.add('wrong'); // marca os errados de vermelho
+            button.classList.add('wrong');
         }
 
-        button.disabled = true; // impede múltiplos cliques
+        button.disabled = true;
     });
 
-
     if (answer.correct) {
-        somAcerto.play(); // 🔊 toca som de acerto
+        somAcerto.play();
         score++;
         body.style.backgroundColor = 'green';
         setTimeout(() => {
@@ -211,7 +226,7 @@ function selectAnswer(answer, question) {
             nextQuestion();
         }, 1000);
     } else {
-        somErro.play(); // 🔊 toca som de erro
+        somErro.play();
         body.style.backgroundColor = 'red';
         const correct = question.answers.find(a => a.correct).text;
         setTimeout(() => {
@@ -222,17 +237,26 @@ function selectAnswer(answer, question) {
     }
 }
 
-
 function nextQuestion() {
     currentQuestionIndex++;
     nextButton.classList.add('hide');
     if (currentQuestionIndex < questions.length) {
         showQuestion(questions[currentQuestionIndex]);
     } else {
-        alert(`Você completou o quiz! Sua pontuação: ${score}/${questions.length}`);
-        startContainer.classList.remove('hide');
-        quizContainer.classList.add('hide');
+        showResults();
     }
 }
+
+function showResults() {
+    quizContainer.classList.add('hide');
+    resultContainer.classList.remove('hide');
+    restartButton.classList.remove('hide'); // Mostra o botão só aqui
+
+    const total = questions.length;
+    const erros = total - score;
+
+    resultText.innerText = `${playerName}, você acertou ${score} de ${total} perguntas.\nErros: ${erros}`;
+}
+
 
 nextButton.addEventListener('click', nextQuestion);
