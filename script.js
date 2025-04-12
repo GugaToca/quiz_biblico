@@ -1,3 +1,7 @@
+const somAcerto = new Audio('acerto.mp3.mp3');
+const somErro = new Audio('erro.mp3.mp3');
+
+
 const questions = [
     {
         question: "Qual é o primeiro livro da Bíblia?",
@@ -145,15 +149,26 @@ const questions = [
     }
 ];
 
+const startContainer = document.getElementById('start-container');
+const quizContainer = document.getElementById('quiz-container');
 const questionElement = document.getElementById('question');
 const answerButtonsElement = document.getElementById('answer-buttons');
 const nextButton = document.getElementById('next-btn');
+const startButton = document.getElementById('start-btn');
 const body = document.body;
 
 let currentQuestionIndex = 0;
+let score = 0;
+
+startButton.addEventListener('click', () => {
+    startContainer.classList.add('hide');
+    quizContainer.classList.remove('hide');
+    startGame();
+});
 
 function startGame() {
     currentQuestionIndex = 0;
+    score = 0;
     nextButton.classList.add('hide');
     showQuestion(questions[currentQuestionIndex]);
 }
@@ -165,46 +180,30 @@ function showQuestion(question) {
         const button = document.createElement('button');
         button.innerText = answer.text;
         button.classList.add('btn');
-        button.addEventListener('click', () => selectAnswer(answer));
+        button.addEventListener('click', () => selectAnswer(answer, question));
         answerButtonsElement.appendChild(button);
     });
 }
 
-function selectAnswer(answer) {
+function selectAnswer(answer, question) {
+    const buttons = answerButtonsElement.querySelectorAll('.btn');
+
+    buttons.forEach(button => {
+        const answerText = button.innerText;
+        const isCorrect = question.answers.find(a => a.text === answerText)?.correct;
+
+        if (isCorrect) {
+            button.classList.add('correct'); // marca o correto de verde
+        } else {
+            button.classList.add('wrong'); // marca os errados de vermelho
+        }
+
+        button.disabled = true; // impede múltiplos cliques
+    });
+
+
     if (answer.correct) {
-        body.style.backgroundColor = 'green';
-        setTimeout(() => {
-            body.style.backgroundColor = '';
-            nextQuestion();
-        }, 1000); // 1 segundo de fundo verde
-    } else {
-        body.style.backgroundColor = 'red';
-        setTimeout(() => {
-            body.style.backgroundColor = '';
-            alert('Resposta errada!');
-            nextButton.classList.remove('hide');
-        }, 1000); // 1 segundo de fundo vermelho
-    }
-}
-
-function nextQuestion() {
-    currentQuestionIndex++;
-    if (currentQuestionIndex < questions.length) {
-        showQuestion(questions[currentQuestionIndex]);
-    } else {
-        alert('Você completou o quiz!');
-        startGame();
-    }
-}
-
-nextButton.addEventListener('click', nextQuestion);
-
-startGame();
-
-let score = 0;
-
-function selectAnswer(answer) {
-    if (answer.correct) {
+        somAcerto.play(); // 🔊 toca som de acerto
         score++;
         body.style.backgroundColor = 'green';
         setTimeout(() => {
@@ -212,22 +211,28 @@ function selectAnswer(answer) {
             nextQuestion();
         }, 1000);
     } else {
+        somErro.play(); // 🔊 toca som de erro
         body.style.backgroundColor = 'red';
+        const correct = question.answers.find(a => a.correct).text;
         setTimeout(() => {
             body.style.backgroundColor = '';
-            alert('Resposta errada!');
+            alert(`Resposta errada! A correta é: ${correct}`);
             nextButton.classList.remove('hide');
         }, 1000);
     }
 }
 
+
 function nextQuestion() {
     currentQuestionIndex++;
+    nextButton.classList.add('hide');
     if (currentQuestionIndex < questions.length) {
         showQuestion(questions[currentQuestionIndex]);
     } else {
         alert(`Você completou o quiz! Sua pontuação: ${score}/${questions.length}`);
-        score = 0;
-        startGame();
+        startContainer.classList.remove('hide');
+        quizContainer.classList.add('hide');
     }
 }
+
+nextButton.addEventListener('click', nextQuestion);
