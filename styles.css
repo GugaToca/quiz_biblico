@@ -1,22 +1,26 @@
 body {
-        background: url('fundo_jogo.jpg') no-repeat center center fixed;
-        background-size: cover;
-        font-family: Arial, sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
-    
- h1  {
-        color: #f1f1f1;
-}    
+    background: url('fundo_jogo.jpg') no-repeat center center fixed;
+    background-size: cover;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
 
-#quiz-container {
+h1, h2, p {
+    color: #f1f1f1;
+    text-shadow: 1px 1px 2px #000;
+    text-align: center;
+}
+
+#start-container, #quiz-container {
     background: linear-gradient(90deg, #ea04f1, #800379);
-    padding: 60px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     text-align: center;
 }
 
@@ -33,11 +37,24 @@ body {
     margin: 5px;
     cursor: pointer;
     border-radius: 5px;
+    font-size: 16px;
 }
 
 .btn:hover {
     background-color: #fce308;
 }
+
+#next-btn {
+    margin-top: 20px;
+    font-size: 18px;
+    background-color: #430350;
+    color: aliceblue;
+}
+
+#next-btn:hover {
+    background-color: #d868cf;
+}
+
 footer {
     position: fixed;
     bottom: 0;
@@ -50,14 +67,16 @@ footer {
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
 
-#next-btn {
-    margin-top: 20px;
-    font-size: 18px;
-    background-color: #430350;
-    color: aliceblue;
+.hide {
+    display: none;
 }
 
-#next-btn:hover {
-    background-color: #d868cf;
-    
+.btn.correct {
+    background-color: #4CAF50 !important; /* verde */
+    color: white;
+}
+
+.btn.wrong {
+    background-color: #f44336 !important; /* vermelho */
+    color: white;
 }
